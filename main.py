@@ -5,6 +5,7 @@ def main():
     #Load data
     X, y, attribute_names, class_dict = ut.load_xls(file_name='data/abalone.xls')
 
+    print(X,y,attribute_names,class_dict)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
