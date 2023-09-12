@@ -8,9 +8,15 @@ def main():
     #ut.pca_analysis(X, y)
     #print(X,y,attribute_names,class_dict)
 
-    full_table = np.concatenate((X,y), axis=1)
-    print(full_table)
-    
-    #
+    # Original table
+    og_table = np.concatenate((X,y), axis=1)
+    print(og_table)
+
+    # Standardized table
+    y_std = y - y.mean(axis=0)
+    y_std = y_std / y_std.std(axis=0)
+    std_table = np.concatenate((X,y_std), axis=1)
+    print(std_table)
+
 if __name__ == '__main__':
     main()
