@@ -13,9 +13,9 @@ def load_xls(file_name):
     x0 = np.array([np.array([class_dict[value] for value in class_labels])])
     x1 = np.array([doc.row_values(i, 1, doc.ncols - 1) for i in range(1, doc.nrows)])
 
-    X = np.concatenate((x0.T, x1), axis=1)
+    X = np.concatenate((x0.T, x1), axis=1) # Table without rings
 
-    y = np.array([doc.row_values(i, doc.ncols - 1, doc.ncols) for i in range(1, doc.nrows)])
+    y = np.array([doc.row_values(i, doc.ncols - 1, doc.ncols) for i in range(1, doc.nrows)]) # Rings only
 
 
     return X, y, attribute_names, class_dict
