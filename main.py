@@ -8,12 +8,9 @@ def main():
     #ut.pca_analysis(X, y)
     #print(X,y,attribute_names,class_dict)
 
-    y_reshaped = np.reshape(y, (1, y.size)) # transpose from vertical to horizontal
-    full_table = np.vstack((X, y_reshaped))
+    full_table = np.concatenate((X,y), axis=1)
     print(full_table)
-
-# Press the green button in the gutter to run the script.
+    
+    #
 if __name__ == '__main__':
     main()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
