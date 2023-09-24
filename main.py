@@ -3,10 +3,10 @@ import numpy as np
 
 def main(file_name):
     #Load data
-    #x0 is the first row of the data containing the decrete catagory attribute, here only Sex
-    #y is the goal attribute we're intterested in finding, here Rings
+    #x0 is the first row of the data containing the discrete category attribute, here only Sex
+    #y is the goal attribute we're interested in finding, here Rings
     #X are the remanding continues attributes
-    x0, X, y, attribute_names, catagory_dict = ut.load_xls(file_name)
+    x0, X, y, attribute_names, category_dict = ut.load_xls(file_name)
 
     # Summary Statistics
     ut.summary_statistics(file_name)
