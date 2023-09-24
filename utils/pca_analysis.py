@@ -3,11 +3,9 @@ import matplotlib.pyplot as plt
 from scipy.linalg import svd
 
 
-def pca_analysis(X_std):
-
+def pca_analysis(x0, Xy_std, category_names, category_dict):
     # PCA by computing SVD of Y
-    U, S, Vh = svd(X_std, full_matrices=False)
-
+    U, S, Vh = svd(Xy_std, full_matrices=False)
 
     # Compute variance explained by principal components
     rho = (S * S) / (S * S).sum()
@@ -30,7 +28,7 @@ def pca_analysis(X_std):
     V = Vh.T
 
     # Project the centered data onto principal component space
-    Z = Y @ V
+    Z = Xy_std @ V
 
     # Indices of the principal components to be plotted
     i = 0
@@ -38,13 +36,14 @@ def pca_analysis(X_std):
 
     # Plot PCA of the data
     f = plt.figure()
-    plt.title('NanoNose data: PCA')
+    plt.title('Abalone data: PCA')
     # Z = array(Z)
-    for c in range(C):
+    x0 = x0.flatten()
+    for c in range(len(category_dict)):
         # select indices belonging to class c:
-        class_mask = y == c
-        plt.plot(Z[class_mask, i], Z[class_mask, j], 'o', alpha=.5)
-    plt.legend(categoryNames)
+        class_mask = x0 == c
+        plt.plot(Z[class_mask, i], Z[class_mask, j], 'x', alpha=.5)
+    plt.legend(category_names)
     plt.xlabel('PC{0}'.format(i + 1))
     plt.ylabel('PC{0}'.format(j + 1))
 
