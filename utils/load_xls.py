@@ -13,7 +13,6 @@ def load_xls(file_name):
     x0 = np.array([np.array([category_dict[value] for value in category_labels])])
     x0 = x0.T
     X = np.array([doc.row_values(i, 1, doc.ncols - 1) for i in range(1, doc.nrows)])
-    y = np.array([doc.row_values(i, doc.ncols - 1, doc.ncols) for i in range(1, doc.nrows)]) # Rings only
+    y = np.array([doc.row_values(i, doc.ncols - 1, doc.ncols) for i in range(1, doc.nrows)])  # Rings only
 
-
-    return x0,X,y, attribute_names, category_names, category_dict
+    return x0, X, y, attribute_names, category_names

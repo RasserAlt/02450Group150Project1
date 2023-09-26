@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.linalg import svd
 
 
-def pca_analysis(x0, Xy_std, category_names, category_dict):
+def pca_analysis(x0, Xy_std, category_names):
     # PCA by computing SVD of Y
     U, S, Vh = svd(Xy_std, full_matrices=False)
 
@@ -24,25 +24,27 @@ def pca_analysis(x0, Xy_std, category_names, category_dict):
     plt.grid()
     plt.show()
 
+    # From the plot we can see only two principal components are needed to explain 90% of the variance
+    # So for projecting the data we use teo first indices of the principal components
+    i = 0
+    j = 1
+
     # of the vector V. So, for us to obtain the correct V, we transpose:
     V = Vh.T
 
     # Project the centered data onto principal component space
     Z = Xy_std @ V
 
-    # Indices of the principal components to be plotted
-    i = 0
-    j = 1
-
     # Plot PCA of the data
     f = plt.figure()
     plt.title('Abalone data: PCA')
     # Z = array(Z)
     x0 = x0.flatten()
-    for c in range(len(category_dict)):
-        # select indices belonging to class c:
-        class_mask = x0 == c
-        plt.plot(Z[class_mask, i], Z[class_mask, j], 'x', alpha=.5)
+    #makes a different colors plot for each category, aka each sex
+    for c in range(len(category_names)):
+        # select indices belonging to category c:
+        category_mask = x0 == c
+        plt.plot(Z[category_mask, i], Z[category_mask, j], 'o', alpha=.75-.25*c)
     plt.legend(category_names)
     plt.xlabel('PC{0}'.format(i + 1))
     plt.ylabel('PC{0}'.format(j + 1))
