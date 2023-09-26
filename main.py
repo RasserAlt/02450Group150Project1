@@ -34,7 +34,7 @@ def main(file_name):
     Xy_std = Xy_std / Xy_std.std(axis=0)
 
     # PCA Analysis
-    ut.pca_analysis(x0, Xy_std, category_names)
+    ut.pca_analysis(x0, Xy_std, category_names, attribute_names[1:])
 
 
 if __name__ == '__main__':

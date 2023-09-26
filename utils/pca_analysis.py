@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.linalg import svd
 
 
-def pca_analysis(x0, Xy_std, category_names):
+def pca_analysis(x0, Xy_std, category_names, attribute_names):
     # PCA by computing SVD of Y
     U, S, Vh = svd(Xy_std, full_matrices=False)
 
@@ -40,14 +40,31 @@ def pca_analysis(x0, Xy_std, category_names):
     plt.title('Abalone data: PCA')
     # Z = array(Z)
     x0 = x0.flatten()
-    #makes a different colors plot for each category, aka each sex
+    # Makes a different colors plot for each category, aka each sex
     for c in range(len(category_names)):
         # select indices belonging to category c:
         category_mask = x0 == c
-        plt.plot(Z[category_mask, i], Z[category_mask, j], 'o', alpha=.75-.25*c)
+        plt.plot(Z[category_mask, i], Z[category_mask, j], '.', alpha=.75-.25*c)
     plt.legend(category_names)
     plt.xlabel('PC{0}'.format(i + 1))
     plt.ylabel('PC{0}'.format(j + 1))
 
     # Output result to screen
+    plt.show()
+
+    # Plot to show the first two principal components coefficient on each continues attributes
+    N, M = Xy_std.shape
+
+    pcs = [0, 1]
+    legendStrs = ['PC' + str(e + 1) for e in pcs]
+    c = ['r', 'g']
+    bw = .2
+    r = np.arange(1, M + 1)
+    for i in pcs:
+        plt.bar(r + i * bw, V[:, i], width=bw)
+    plt.xticks(r + bw, attribute_names)
+    plt.ylabel('Component coefficients')
+    plt.legend(legendStrs)
+    plt.grid()
+    plt.title('Abalone: PCA Component Coefficients')
     plt.show()
