@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 from scipy.linalg import svd
 
 
-def pca_analysis(x0, Xy_std, category_names, attribute_names):
+def pca_analysis(X_std, y, class_names, variable_names):
     # PCA by computing SVD of Y
-    U, S, Vh = svd(Xy_std, full_matrices=False)
+    U, S, Vh = svd(X_std, full_matrices=False)
 
     # Compute variance explained by principal components
     rho = (S * S) / (S * S).sum()
@@ -33,19 +33,19 @@ def pca_analysis(x0, Xy_std, category_names, attribute_names):
     V = Vh.T
 
     # Project the centered data onto principal component space
-    Z = Xy_std @ V
+    Z = X_std @ V
 
     # Plot PCA of the data
-    f = plt.figure()
+    plt.figure()
     plt.title('Abalone data: PCA')
-    # Z = array(Z)
-    x0 = x0.flatten()
-    # Makes a different colors plot for each category, aka each sex
-    for c in range(len(category_names)):
-        # select indices belonging to category c:
-        category_mask = x0 == c
-        plt.plot(Z[category_mask, i], Z[category_mask, j], '.', alpha=.75-.25*c)
-    plt.legend(category_names)
+    y = y.flatten()
+
+    for c in range(len(class_names)):
+        class_mask = []
+        for h in range(len(y)):
+            class_mask.append(0 <= y[h] < 5 if c == 0 else 5 <= y[h] < 10 if c == 1 else 10 <= y[h])
+        plt.plot(Z[class_mask, i], Z[class_mask, j], '.', alpha=.75 - .25 * c)
+    plt.legend(class_names)
     plt.xlabel('PC{0}'.format(i + 1))
     plt.ylabel('PC{0}'.format(j + 1))
 
@@ -53,7 +53,7 @@ def pca_analysis(x0, Xy_std, category_names, attribute_names):
     plt.show()
 
     # Plot to show the first two principal components coefficient on each continues attributes
-    N, M = Xy_std.shape
+    N, M = X_std.shape
 
     pcs = [0, 1]
     legendStrs = ['PC' + str(e + 1) for e in pcs]
@@ -62,7 +62,7 @@ def pca_analysis(x0, Xy_std, category_names, attribute_names):
     r = np.arange(1, M + 1)
     for i in pcs:
         plt.bar(r + i * bw, V[:, i], width=bw)
-    plt.xticks(r + bw, attribute_names)
+    plt.xticks(r + bw, variable_names)
     plt.ylabel('Component coefficients')
     plt.legend(legendStrs)
     plt.grid()
