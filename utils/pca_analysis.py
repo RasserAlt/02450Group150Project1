@@ -52,7 +52,7 @@ def pca_analysis(X_std, y, class_names, variable_names):
     # Output result to screen
     plt.show()
 
-    # Plot to show the first two principal components coefficient on each continues attributes
+    # Plot to show the first two principal components coefficient on each continuous attributes
     N, M = X_std.shape
 
     pcs = [0, 1]
