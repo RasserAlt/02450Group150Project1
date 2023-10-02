@@ -4,7 +4,7 @@ def hist_plot(Xy, attribute_names):
     fig, sub_figs_2D = plt.subplots(4, 2)
     sub_figs = sub_figs_2D.flatten()
 
-    # Plotting histogram for each continues attribute
+    # Plotting histogram for each continuous attribute
     for i in range(len(attribute_names)):
         sub_fig = sub_figs[i]
         sub_fig.hist(Xy[:,i], density=True, alpha=0.5)

@@ -32,7 +32,7 @@ def main(file_name):
     y_std = y - y.mean(axis=0)
     y_std = y_std / y_std.std(axis=0)
 
-    # Histogram of quantitative attributes
+    # Histogram of continuous attributes
     Xy_std = np.concatenate((X_std, y_std), axis=1)
     ut.hist_plot(Xy_std, variable_names+['ring'])
 
