@@ -26,8 +26,8 @@ def pca_analysis(X_std, y, ring_class, variable_names):
 
     # From the plot we can see only two principal components are needed to explain 90% of the variance
     # So for projecting the data we use teo first indices of the principal components
-    i = 2
-    j = 3
+    i = 0
+    j = 1
 
     # of the vector V. So, for us to obtain the correct V, we transpose:
     V = Vh.T
