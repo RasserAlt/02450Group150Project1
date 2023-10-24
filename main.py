@@ -2,13 +2,7 @@ import utils as ut
 import numpy as np
 
 
-def main(file_name):
-    # Load data
-    # x0 is the first row of the data containing the discrete category variable Sex
-    # y is the goal attribute we're interested in finding, here Rings
-    # X are the remanding continuous variables
-    x0, X, y, variable_names, class_names = ut.load_xls(file_name)
-
+def project1Stuff(x0, X, y, variable_names, class_names):
     # Summary Statistics
     # ut.summary_statistics(file_name)
 
@@ -34,15 +28,26 @@ def main(file_name):
 
     # Histogram of continuous attributes
     Xy_std = np.concatenate((X_std, y_std), axis=1)
-    ut.hist_plot(Xy_std, variable_names+['ring'])
+    ut.hist_plot(Xy_std, variable_names + ['ring'])
 
-    #categorizes the ring clas
+    # categorizes the ring clas
     ring_class = [0, 6, 12, 18]
-
 
     # PCA Analysis
     ut.pca_analysis(X_std, y, ring_class, class_names + variable_names)
 
+def project2Stuff(x0, X, y, variable_names, class_names):
+    print("Project 2!")
+
+def main(file_name):
+    # Load data
+    # x0 is the first row of the data containing the discrete category variable Sex
+    # y is the goal attribute we're interested in finding, here Rings
+    # X are the remanding continuous variables
+    x0, X, y, variable_names, class_names = ut.load_xls(file_name)
+
+    #project1Stuff(x0, X, y, variable_names, class_names)
+    project2Stuff(x0, X, y, variable_names, class_names)
 
 if __name__ == '__main__':
     main('data/abalone.xls')
