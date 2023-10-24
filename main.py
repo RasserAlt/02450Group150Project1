@@ -1,6 +1,7 @@
 import utils as ut
 import numpy as np
 
+
 def project1Stuff(x0, X, y, variable_names, class_names):
     # Summary Statistics
     # ut.summary_statistics(file_name)
@@ -36,7 +37,6 @@ def project1Stuff(x0, X, y, variable_names, class_names):
     ut.pca_analysis(X_std, y, ring_class, class_names + variable_names)
 
 def project2Stuff(x0, X, y, variable_names, class_names):
-    ut.regression_a(X, y)
     print("Project 2!")
 
 def main(file_name):
