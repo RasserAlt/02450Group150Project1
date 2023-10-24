@@ -28,7 +28,7 @@ def project1Stuff(x0, X, y, variable_names, class_names):
 
     # Histogram of continuous attributes
     Xy_std = np.concatenate((X_std, y_std), axis=1)
-    ut.hist_plot(Xy_std, variable_names + ['ring'])
+    ut.hist_plot(Xy_std[:, 3:], variable_names + ['ring'])
 
     # categorizes the ring clas
     ring_class = [0, 6, 12, 18]
@@ -36,8 +36,19 @@ def project1Stuff(x0, X, y, variable_names, class_names):
     # PCA Analysis
     ut.pca_analysis(X_std, y, ring_class, class_names + variable_names)
 
+
 def project2Stuff(x0, X, y, variable_names, class_names):
     print("Project 2!")
+    # remove outlies
+    ut.refactor_outlier(X, 2, True, 10)
+    ut.refactor_outlier(X, 2, True, 10)
+    X = np.concatenate((x0, X), axis=1)
+    # Standardized table
+    X_std = X - X.mean(axis=0)
+    X_std = X_std / X_std.std(axis=0)
+
+    ut.regression_linear(X, y, variable_names)
+
 
 def main(file_name):
     # Load data
@@ -46,8 +57,9 @@ def main(file_name):
     # X are the remanding continuous variables
     x0, X, y, variable_names, class_names = ut.load_xls(file_name)
 
-    #project1Stuff(x0, X, y, variable_names, class_names)
+    # project1Stuff(x0, X, y, variable_names, class_names)
     project2Stuff(x0, X, y, variable_names, class_names)
+
 
 if __name__ == '__main__':
     main('data/abalone.xls')
