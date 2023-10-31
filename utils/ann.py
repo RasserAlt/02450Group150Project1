@@ -5,14 +5,12 @@ from sklearn import model_selection
 import torch
 import utils as ut
 
-def train_and_visualize_model(x0, X, y, variable_names, class_names):
+def train_and_visualize_model(x0, X, y, attributeNames, classNames):
     plt.rcParams.update({'font.size': 12})
 
-    attributeNames = [name[0] for name in variable_names if isinstance(name, list)]
-    classNames = [name[0] for name in class_names if isinstance(name, list)]
     # Use the given parameters instead of loading data from a file
     N, M = X.shape
-    C = len(class_names)
+    C = len(classNames)
 
     # K-fold CrossValidation (4 folds here to speed up this example)
     K = 4
