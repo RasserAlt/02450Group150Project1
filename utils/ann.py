@@ -2,14 +2,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import model_selection
-from lecture_tools import train_neural_net, draw_neural_net, visualize_decision_boundary
+import lecture_tools as lt
 import torch
 
 def train_and_visualize_model(x0, X, y, variable_names, class_names):
     plt.rcParams.update({'font.size': 12})
 
-    attributeNames = [name[0] for name in variable_names.squeeze()]
-    classNames = [name[0] for name in class_names.squeeze()]
+    attributeNames = [name[0] for name in variable_names if isinstance(name, list)]
+    classNames = [name[0] for name in class_names if isinstance(name, list)]
     # Use the given parameters instead of loading data from a file
     N, M = X.shape
     C = len(class_names)
@@ -74,7 +74,7 @@ def train_and_visualize_model(x0, X, y, variable_names, class_names):
         # Go to the file 'toolbox_02450.py' in the Tools sub-folder of the toolbox
         # and see how the network is trained (search for 'def train_neural_net',
         # which is the place the function below is defined)
-        net, final_loss, learning_curve = train_neural_net(model,
+        net, final_loss, learning_curve = lt.train_neural_net(model,
                                                            loss_fn,
                                                            X=X_train,
                                                            y=y_train,
@@ -101,7 +101,7 @@ def train_and_visualize_model(x0, X, y, variable_names, class_names):
         plt.subplot(subplot_size_1, subplot_size_2, k + 1)
         plt.title('CV fold {0}'.format(k + 1), color=color_list[k])
         predict = lambda x: net(torch.tensor(x, dtype=torch.float)).data.numpy()
-        visualize_decision_boundary(predict, X, y,  # provide data, along with function for prediction
+        lt.visualize_decision_boundary(predict, X, y,  # provide data, along with function for prediction
                                     attributeNames, classNames,  # provide information on attribute and class names
                                     train=train_index, test=test_index,  # provide information on partioning
                                     show_legend=k == (K - 1))  # only display legend for last plot
@@ -131,7 +131,7 @@ def train_and_visualize_model(x0, X, y, variable_names, class_names):
     weights = [net[i].weight.data.numpy().T for i in [0, 2]]
     biases = [net[i].bias.data.numpy() for i in [0, 2]]
     tf = [str(net[i]) for i in [1, 3]]
-    draw_neural_net(weights, biases, tf)
+    lt.draw_neural_net(weights, biases, tf)
 
     # Print the average classification error rate
     print('\nGeneralization error/average error rate: {0}%'.format(round(100 * np.mean(errors), 4)))
