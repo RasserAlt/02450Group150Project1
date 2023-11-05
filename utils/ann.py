@@ -25,7 +25,7 @@ def reduce_feature_space(X):
     return X_reduced
 
 
-def train_and_visualize_model(x0, X, y, attributeNames, classNames):
+def train_and_visualize_model(x0, X, y, attributeNames, classNames, n_hidden_units = 1):
     plt.rcParams.update({'font.size': 12})
 
     # Use the given parameters instead of loading data from a file
@@ -54,7 +54,7 @@ def train_and_visualize_model(x0, X, y, attributeNames, classNames):
                   'tab:gray', 'tab:olive', 'tab:cyan', 'tab:red', 'tab:blue']
 
     # Define the model structure
-    n_hidden_units = 1  # number of hidden units in the signle hidden layer
+    #n_hidden_units = 1  # number of hidden units in the signle hidden layer
     # The lambda-syntax defines an anonymous function, which is used here to
     # make it easy to make new networks within each cross validation fold
     model = lambda: torch.nn.Sequential(
