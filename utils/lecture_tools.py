@@ -24,7 +24,7 @@ def get_data_ranges(x):
 
 
 def train_neural_net(model, loss_fn, X, y,
-                     n_replicates=3, max_iter=10000, tolerance=1e-6):
+                     n_replicates=3, max_iter=10000, tolerance=1e-6, weight_decay=0):
     """
     Train a neural network with PyTorch based on a training set consisting of
     observations X and class y. The model and loss_fn inputs define the
@@ -116,7 +116,7 @@ def train_neural_net(model, loss_fn, X, y,
 
         # A more complicated optimizer is the Adam-algortihm, which is an extension
         # of SGD to adaptively change the learing rate, which is widely used:
-        optimizer = torch.optim.Adam(net.parameters())
+        optimizer = torch.optim.Adam(net.parameters(), weight_decay=weight_decay)
 
         # Train the network while displaying and storing the loss
         print('\t\t{}\t{}\t\t\t{}'.format('Iter', 'Loss', 'Rel. loss'))

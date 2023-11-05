@@ -25,7 +25,7 @@ def reduce_feature_space(X):
     return X_reduced
 
 
-def train_and_visualize_model(x0, X, y, attributeNames, classNames, n_hidden_units = 1):
+def train_and_visualize_model(x0, X, y, attributeNames, classNames, n_hidden_units = 1, weight_decay=0):
     plt.rcParams.update({'font.size': 12})
 
     # Use the given parameters instead of loading data from a file
@@ -58,7 +58,7 @@ def train_and_visualize_model(x0, X, y, attributeNames, classNames, n_hidden_uni
     # The lambda-syntax defines an anonymous function, which is used here to
     # make it easy to make new networks within each cross validation fold
     model = lambda: torch.nn.Sequential(
-        torch.nn.Linear(M, n_hidden_units),  # M features to H hiden units
+        torch.nn.Linear(M, n_hidden_units),  # M features to H hidden units
         # 1st transfer function, either Tanh or ReLU:
         torch.nn.Tanh(),  # torch.nn.ReLU(),
         torch.nn.Linear(n_hidden_units, 1),  # H hidden units to 1 output neuron
@@ -97,7 +97,7 @@ def train_and_visualize_model(x0, X, y, attributeNames, classNames, n_hidden_uni
                                                            X=X_train,
                                                            y=y_train,
                                                            n_replicates=3,
-                                                           max_iter=max_iter)
+                                                           max_iter=max_iter, weight_decay=weight_decay)
 
         print('\n\tBest loss: {}\n'.format(final_loss))
 

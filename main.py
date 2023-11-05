@@ -54,7 +54,7 @@ def project2Stuff(x0, X, y, variable_names, class_names):
     y_std = y_std / y_std.std(axis=0)
 
     X_reduced = ut.reduce_feature_space(X_std)
-    ut.train_and_visualize_model(x0, X_reduced, y_std, variable_names, class_names, 2)
+    ut.train_and_visualize_model(x0, X_reduced, y_std, variable_names, class_names, 2, 0.0001)
     print("Project 2!")
 
 def main(file_name):
