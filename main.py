@@ -37,7 +37,8 @@ def project1Stuff(x0, X, y, variable_names, class_names):
     ut.pca_analysis(X_std, y, ring_class, class_names + variable_names)
 
 def project2Stuff(x0, X, y, variable_names, class_names):
-    ut.train_and_visualize_model(x0, X, y, variable_names, class_names)
+    X_reduced = ut.reduce_feature_space(X)
+    ut.train_and_visualize_model(x0, X_reduced, y, variable_names, class_names)
     print("Project 2!")
 
 def main(file_name):
