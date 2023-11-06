@@ -38,6 +38,24 @@ def project1Stuff(x0, X, y, variable_names, class_names):
 
 
 def project2Stuff(x0, X, y, variable_names, class_names):
+    # Refactors the highest two height outliers by a factors of 10
+    ut.refactor_outlier(X, 2, True, 10)
+    ut.refactor_outlier(X, 2, True, 10)
+
+    # Boxplot of refactored height
+    ut.box_plot(X[:, :4], variable_names[:4])
+
+    X = np.concatenate((x0, X), axis=1)
+
+    # Standardized table
+    X_std = X - X.mean(axis=0)
+    X_std = X_std / X_std.std(axis=0)
+
+    y_std = y - y.mean(axis=0)
+    y_std = y_std / y_std.std(axis=0)
+
+    X_reduced = ut.reduce_feature_space(X_std)
+    ut.train_and_visualize_model(x0, X_reduced, y_std, variable_names, class_names, 2, 0.0001)
     print("Project 2!")
     # remove outlies
     ut.refactor_outlier(X, 2, True, 10)
