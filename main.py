@@ -47,8 +47,7 @@ def project2Stuff(x0, X, y, variable_names, class_names):
     X_std = X - X.mean(axis=0)
     X_std = X_std / X_std.std(axis=0)
 
-    ut.regression_linear(X, y, variable_names)
-
+    ut.regularized_linear_regression(X, y, class_names + variable_names, np.power(10., np.arange(-1, 1, 0.1)))
 
 def main(file_name):
     # Load data
