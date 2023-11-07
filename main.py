@@ -37,7 +37,7 @@ def project1Stuff(x0, X, y, variable_names, class_names):
     ut.pca_analysis(X_std, y, ring_class, class_names + variable_names)
 
 
-def project2Stuff(x0, X, y, variable_names, class_names):
+def project2Stuff(x0, X, y, attribute_names, sex_names):
     # Refactors the highest two height outliers by a factors of 10
     ut.refactor_outlier(X, 2, True, 10)
     ut.refactor_outlier(X, 2, True, 10)
@@ -49,9 +49,9 @@ def project2Stuff(x0, X, y, variable_names, class_names):
     y_std = y_std / y_std.std(axis=0)
 
     X_reduced = ut.reduce_feature_space(X_std)
-    ut.train_and_visualize_model(X_reduced, y_std, variable_names, class_names, 2, 0.0001)
+    ut.train_and_visualize_model(X_reduced, y_std, attribute_names, sex_names, 2, 0.0001)
 
-    #ut.regularized_linear_regression(X_std, y_std, class_names + variable_names, np.power(10., np.arange(-1, 1, 0.1)))
+    #ut.regularized_linear_regression(X_std, y_std, sex_names + attribute_names, np.power(10., np.arange(-1, 1, 0.1)))
     #ut.two_layer_cross_validation(X_std, y_std, np.power(10., np.arange(-1, 1, 0.1)))
     print("Project 2!")
 def main(file_name):
@@ -59,10 +59,10 @@ def main(file_name):
     # x0 is the first row of the data containing the discrete category variable Sex
     # y is the goal attribute we're interested in finding, here Rings
     # X are the remanding continuous variables
-    x0, X, y, variable_names, sex_names = ut.load_xls(file_name)
+    x0, X, y, attribute_names, sex_names = ut.load_xls(file_name)
 
-    # project1Stuff(x0, X, y, variable_names, sex_names)
-    project2Stuff(x0, X, y, variable_names, sex_names)
+    # project1Stuff(x0, X, y, attribute_names, sex_names)
+    project2Stuff(x0, X, y, attribute_names, sex_names)
 
 
 if __name__ == '__main__':
