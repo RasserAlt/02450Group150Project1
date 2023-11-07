@@ -25,7 +25,7 @@ def reduce_feature_space(X):
     return X_reduced
 
 
-def train_and_visualize_model(X, y, attributeNames, classNames, n_hidden_units = 1, weight_decay=0):
+def train_and_visualize_model(X, y, attributeNames, n_hidden_units = 1, weight_decay=0):
     plt.rcParams.update({'font.size': 12})
 
     # Use the given parameters instead of loading data from a file
@@ -119,7 +119,7 @@ def train_and_visualize_model(X, y, attributeNames, classNames, n_hidden_units =
         plt.title('CV fold {0}'.format(k + 1), color=color_list[k])
         predict = lambda x: net(torch.tensor(x, dtype=torch.float)).data.numpy()
         ut.visualize_decision_boundary(predict, X, y,  # provide data, along with function for prediction
-                                    attributeNames, classNames,  # provide information on attribute and class names
+                                    attributeNames, ["Rings"],  # provide information on attribute and class names
                                     train=train_index, test=test_index,  # provide information on partioning
                                     show_legend=k == (K - 1))  # only display legend for last plot
 
