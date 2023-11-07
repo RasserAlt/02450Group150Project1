@@ -41,41 +41,28 @@ def project2Stuff(x0, X, y, variable_names, class_names):
     # Refactors the highest two height outliers by a factors of 10
     ut.refactor_outlier(X, 2, True, 10)
     ut.refactor_outlier(X, 2, True, 10)
-
-    # Boxplot of refactored height
-    ut.box_plot(X[:, :4], variable_names[:4])
-
     X = np.concatenate((x0, X), axis=1)
-
     # Standardized table
     X_std = X - X.mean(axis=0)
     X_std = X_std / X_std.std(axis=0)
-
     y_std = y - y.mean(axis=0)
     y_std = y_std / y_std.std(axis=0)
 
     X_reduced = ut.reduce_feature_space(X_std)
-    ut.train_and_visualize_model(x0, X_reduced, y_std, variable_names, class_names, 2, 0.0001)
+    ut.train_and_visualize_model(X_reduced, y_std, variable_names, class_names, 2, 0.0001)
+
+    #ut.regularized_linear_regression(X_std, y_std, class_names + variable_names, np.power(10., np.arange(-1, 1, 0.1)))
+    #ut.two_layer_cross_validation(X_std, y_std, np.power(10., np.arange(-1, 1, 0.1)))
     print("Project 2!")
-    # remove outlies
-    ut.refactor_outlier(X, 2, True, 10)
-    ut.refactor_outlier(X, 2, True, 10)
-    X = np.concatenate((x0, X), axis=1)
-    # Standardized table
-    X_std = X - X.mean(axis=0)
-    X_std = X_std / X_std.std(axis=0)
-
-    ut.regularized_linear_regression(X, y, class_names + variable_names, np.power(10., np.arange(-1, 1, 0.1)))
-
 def main(file_name):
     # Load data
     # x0 is the first row of the data containing the discrete category variable Sex
     # y is the goal attribute we're interested in finding, here Rings
     # X are the remanding continuous variables
-    x0, X, y, variable_names, class_names = ut.load_xls(file_name)
+    x0, X, y, variable_names, sex_names = ut.load_xls(file_name)
 
-    # project1Stuff(x0, X, y, variable_names, class_names)
-    project2Stuff(x0, X, y, variable_names, class_names)
+    # project1Stuff(x0, X, y, variable_names, sex_names)
+    project2Stuff(x0, X, y, variable_names, sex_names)
 
 
 if __name__ == '__main__':

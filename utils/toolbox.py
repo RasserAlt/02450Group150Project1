@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn import model_selection
+import scipy.stats as st
 
 def rlr_validate(X, y, lambdas, cvf=10):
     ''' Validate regularized linear regression model using 'cvf'-fold cross validation.
@@ -65,3 +66,13 @@ def rlr_validate(X, y, lambdas, cvf=10):
     mean_w_vs_lambda = np.squeeze(np.mean(w, axis=1))
 
     return opt_val_err, opt_lambda, mean_w_vs_lambda, train_err_vs_lambda, test_err_vs_lambda
+
+def correlated_ttest(r, rho, alpha=0.05):
+    rhat = np.mean(r)
+    shat = np.std(r)
+    J = len(r)
+    sigmatilde = shat * np.sqrt(1 / J + rho / (1 - rho))
+
+    CI = st.t.interval(1 - alpha, df=J - 1, loc=rhat, scale=sigmatilde)  # Confidence interval
+    p = 2*st.t.cdf(-np.abs(rhat) / sigmatilde, df=J - 1)  # p-value
+    return p, CI

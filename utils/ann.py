@@ -25,12 +25,11 @@ def reduce_feature_space(X):
     return X_reduced
 
 
-def train_and_visualize_model(x0, X, y, attributeNames, classNames, n_hidden_units = 1, weight_decay=0):
+def train_and_visualize_model(X, y, attributeNames, classNames, n_hidden_units = 1, weight_decay=0):
     plt.rcParams.update({'font.size': 12})
 
     # Use the given parameters instead of loading data from a file
     N, M = X.shape
-    C = len(classNames)
 
     # K-fold CrossValidation (4 folds here to speed up this example)
     K = 4
