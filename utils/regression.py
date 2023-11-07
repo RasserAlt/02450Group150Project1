@@ -16,11 +16,11 @@ def baseline(y):
     y.mean()
 
 
-def regularized_linear_regression(X, y, variable_names, lambdas):
+def regularized_linear_regression(X, y, attribute_names, lambdas):
     N, M = X.shape
     y = y.squeeze()
     X = np.concatenate((np.ones((X.shape[0], 1)), X), 1)
-    variable_names = [u'Offset'] + variable_names
+    attribute_names = [u'Offset'] + attribute_names
     M = M + 1
     K = 10
 
@@ -56,4 +56,4 @@ def regularized_linear_regression(X, y, variable_names, lambdas):
     w_rlr[:] = np.linalg.solve(XtX + lambdaI, Xty).squeeze()
 
     for m in range(M):
-        print('{:>11} {:>11}'.format(variable_names[m], np.round(w_rlr[m], 2)))
+        print('{:>11} {:>11}'.format(attribute_names[m], np.round(w_rlr[m], 2)))
