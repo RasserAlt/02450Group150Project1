@@ -1,6 +1,8 @@
 import utils as ut
 import numpy as np
 
+from utils.classification import classification
+
 
 def project1Stuff(x0, X, y, variable_names, class_names):
     # Summary Statistics
@@ -47,7 +49,7 @@ def project2Stuff(x0, X, y, attribute_names, sex_names):
     X_std = X_std / X_std.std(axis=0)
     y_std = y - y.mean(axis=0)
     y_std = y_std / y_std.std(axis=0)
-    ut.classification()
+    classification.classification()
 
     X_reduced = ut.reduce_feature_space(X_std)
     ut.train_and_visualize_model(X_reduced, y_std, sex_names + attribute_names, 2, 0.0001)

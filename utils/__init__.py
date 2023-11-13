@@ -7,3 +7,4 @@ from .regression import regularized_linear_regression
 from .lecture_tools import get_data_ranges, train_neural_net, draw_neural_net, visualize_decision_boundary
 from .ann import train_and_visualize_model, reduce_feature_space
 from .cross_validation import two_layer_cross_validation
+from .classification import classification
