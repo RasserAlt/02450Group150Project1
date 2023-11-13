@@ -26,9 +26,6 @@ def classification():
     # Split your dataset into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Resample the training data
-    X_train, y_train = ros.fit_resample(X_train, y_train)
-
     train_binary_class_counts = y_train.value_counts()
     plt.bar(train_binary_class_counts.index, train_binary_class_counts.values)
     plt.xlabel('BinaryClass')
@@ -36,6 +33,9 @@ def classification():
     plt.title('Class Distribution in Original Training Set')
     plt.xticks(train_binary_class_counts.index, ['Young Abalones', 'Mature Abalones'])  # Optional, if you want to label the x-axis
     plt.show()
+
+    # Resample the training data
+    X_train, y_train = ros.fit_resample(X_train, y_train)
 
     classification_baseline(X_train, X_test, y_train, y_test)
     classification_knn(X_train, X_test, y_train, y_test)
