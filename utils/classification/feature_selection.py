@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 
 def feature_selection():
     # Load and preprocess your data
-    data = pd.read_excel('../data/abalone.xls')
+    data = pd.read_excel('data/abalone.xls')
     data['BinaryClass'] = (data['Rings'] < 7.5).astype(int)
     X = data.drop(['BinaryClass', 'Rings'], axis=1)
     y = data['BinaryClass']
