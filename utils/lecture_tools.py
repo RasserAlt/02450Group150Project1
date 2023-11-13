@@ -369,71 +369,64 @@ def visualize_decision_boundary(predict,
                                 delta=5e-3,
                                 show_legend=True):
     '''
-    Visualize the decision boundary of a classifier trained on a 2 dimensional
-    input feature space.
-
-    Creates a grid of points based on ranges of features in X, then determines
-    classifier output for each point. The predictions are color-coded and plotted
-    along with the data and a visualization of the partitioning in training and
-    test if provided.
+    Visualize the decision boundary of a classifier trained on an input feature space.
 
     Args:
         predict:
-                A lambda function that takes the a grid of shape [M, N] as
-                input and returns the prediction of the classifier. M corre-
-                sponds to the number of features (M==2 required), and N corre-
-                sponding to the number of points in the grid. Can e.g. be a
-                trained PyTorch network (torch.nn.Sequential()), such as trained
-                using toolbox_02450.train_neural_network, where the provided
-                function would be something similar to:
-                >>> predict = lambda x: (net(torch.tensor(x, dtype=torch.float))).data.numpy()
+            A lambda function that takes the a grid of shape [M, N] as
+            input and returns the prediction of the classifier. M corre-
+            sponds to the number of features, and N corre-
+            sponding to the number of points in the grid. Can e.g. be a
+            trained PyTorch network (torch.nn.Sequential()), such as trained
+            using toolbox_02450.train_neural_network, where the provided
+            function would be something similar to:
+            >>> predict = lambda x: (net(torch.tensor(x, dtype=torch.float))).data.numpy()
 
         X:      A numpy array of shape (N, M), where N is the number of
-                observations and M is the number of input features (constrained
-                to M==2 for this visualization).
-                If X is a list of len(X)==2, then each element in X is inter-
-                preted as a partition of training or test data, such that
-                X[0] is the training set and X[1] is the test set.
+            observations and M is the number of input features.
+            If X is a list of len(X)==2, then each element in X is inter-
+            preted as a partition of training or test data, such that
+            X[0] is the training set and X[1] is the test set.
 
         y:      A numpy array of shape (N, 1), where N is the number of
-                observations. Each element is either 0 or 1, as the
-                visualization is constrained to a binary classification
-                problem.
-                If y is a list of len(y)==2, then each element in y is inter-
-                preted as a partion of training or test data, such that
-                y[0] is the training set and y[1] is the test set.
+            observations. Each element is the class label.
+            If y is a list of len(y)==2, then each element in y is inter-
+            preted as a partion of training or test data, such that
+            y[0] is the training set and y[1] is the test set.
 
         attribute_names:
-                A list of strings of length 2 giving the name
-                of each of the M attributes in X.
+            A list of strings of length M giving the name
+            of each of the M attributes in X.
 
         class_names:
-                A list of strings giving the name of each class in y.
+            A list of strings giving the name of each class in y.
 
         train (optional):
-                A list of indices describing the indices in X and y used for
-                training the network. E.g. from the output of:
-                    sklearn.model_selection.KFold(2).split(X, y)
+            A list of indices describing the indices in X and y used for
+            training the network. E.g. from the output of:
+                sklearn.model_selection.KFold(2).split(X, y)
 
         test (optional):
-                A list of indices describing the indices in X and y used for
-                testing the network (see also argument "train").
+            A list of indices describing the indices in X and y used for
+            testing the network (see also argument "train").
 
         delta (optional):
-                A float describing the resolution of the decision
-                boundary (default: 0.01). Default results grid of 100x100 that
-                covers the first and second dimension range plus an additional
-                25 percent.
+            A float describing the resolution of the decision
+            boundary (default: 0.01). Default results grid of 100x100 that
+            covers the first and second dimension range plus an additional
+            25 percent.
         show_legend (optional):
-                A boolean designating whether to display a legend. Defaults
-                to True.
+            A boolean designating whether to display a legend. Defaults
+            to True.
 
     Returns:
         Plots the decision boundary on a matplotlib.pyplot figure.
-
     '''
 
     import torch
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib import cm
 
     C = len(class_names)
     if isinstance(X, list) or isinstance(y, list):
@@ -449,11 +442,11 @@ def visualize_decision_boundary(predict,
     else:
         N, M = X.shape
         grid_range = get_data_ranges(X)
-    assert M == 2, 'TwoFeatureError: Current neural_net_decision_boundary is only implemented for 2 features.'
+
     # Convert test/train indices to boolean index if provided:
     if train is not None or test is not None:
         assert not isinstance(X,
-                              list), 'Cannot provide indices of test and train partition, if X is provided as list of train and test partition.'
+                              list), 'Cannot provide indices of test and train partition, if X is provided as a list of train and test partition.'
         assert not isinstance(y,
                               list), 'Cannot provide indices of test and train partition, if y is provided as list of train and test partition.'
         assert train is not None, 'If test is provided, then train must also be provided.'
@@ -461,29 +454,19 @@ def visualize_decision_boundary(predict,
         train_index = np.array([(int(e) in train) for e in np.linspace(0, N - 1, N)])
         test_index = np.array([(int(e) in test) for e in np.linspace(0, N - 1, N)])
 
-    xx = np.arange(grid_range[0], grid_range[1], delta)
-    yy = np.arange(grid_range[2], grid_range[3], delta)
-    # make a mesh-grid from a and b that spans the grid-range defined
-    grid = np.stack(np.meshgrid(xx, yy))
-    # reshape grid to be of shape "[number of feature dimensions] by [number of points in grid]"
+    # Generate meshgrid based on the number of features
+    xx = [np.arange(grid_range[i], grid_range[i + 1], delta) for i in range(M)]
+    grid = np.stack(np.meshgrid(*xx))
+    grid_shape = grid.shape[1:]
+
+    # Reshape grid to be of shape "[number of feature dimensions] by [number of points in grid]"
     # this ensures that the shape fits the way the network expects input to be shaped
-    # and determine estimated class label for entire featurespace by estimating
-    # the label of each point in the previosly defined grid using provided
-    # function predict()
-    grid_predictions = predict(np.reshape(grid, (2, -1)).T)
+    grid_reshaped = np.reshape(grid, (M, -1)).T
+    grid_predictions = predict(grid_reshaped)
 
     # Plot data with color designating class and transparency+shape
     # identifying partition (test/train)
-    if C == 2:
-        c = ['r', 'b']
-        cmap = cm.bwr
-        vmax = 1
-    else:
-        c = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple',
-             'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan']
-        cmap = cm.tab10
-        vmax = 10
-
+    c = cm.rainbow(np.linspace(0, 1, C))
     s = ['o', 'x'];
     t = [.33, 1.0];
     for i in range(C):
@@ -496,18 +479,21 @@ def visualize_decision_boundary(predict,
                 idx = np.squeeze(y_par) == i
                 h = plt.plot(X_par[idx, 0], X_par[idx, 1], s[j], color=c[i], alpha=t[j])
 
-    plt.xlim(grid_range[0:2])
-    plt.ylim(grid_range[2:])
-    plt.xlabel(attribute_names[0]);
-    plt.ylabel(attribute_names[1])
+    plt.xlim(grid_range[0])
+    plt.ylim(grid_range[1])
+    for i in range(M):
+        plt.xlabel(attribute_names[i])
+    plt.ylabel(attribute_names[M - 1])
 
     # reshape the predictions for each point in the grid to be shaped like
-    # an image that corresponds to the feature-scace using the ranges that
-    # defined the grid (a and b)
-    decision_boundary = np.reshape(grid_predictions, (len(yy), len(xx)))
+    # an image that corresponds to the feature-space using the ranges that
+    # defined the grid
+    decision_boundary = grid_predictions.reshape(grid_shape[0], grid_shape[1]).T
     # display the decision boundary
-    ax = plt.imshow(decision_boundary, cmap=cmap,
-                    extent=grid_range, vmin=0, vmax=vmax, alpha=.33, origin='lower')
+    ax = plt.imshow(decision_boundary, cmap=cm.bwr,
+                    extent=(np.min(grid_range[0]), np.max(grid_range[0]), np.min(grid_range[1]), np.max(grid_range[1])),
+                    vmin=0, vmax=1, alpha=.33, origin='lower')
+
     plt.axis('auto')
     if C == 2:
         plt.contour(grid[0], grid[1], decision_boundary, levels=[.5])
