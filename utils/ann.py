@@ -131,4 +131,7 @@ def train_and_visualize_model(X, y, attributeNames, n_hidden_units = 1, weight_d
     ut.draw_neural_net(weights, biases, tf)
 
     # Print the average classification error rate
-    print('\nGeneralization error/average error rate: {0}%'.format(round(100 * np.mean(errors), 4)))
+    average_error_rate = round(100 * np.mean(errors), 4)
+    print(f'\nGeneralization error/average error rate: {average_error_rate}%')
+    return average_error_rate
+

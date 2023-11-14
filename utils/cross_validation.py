@@ -2,6 +2,7 @@ from matplotlib.pylab import (figure, semilogx, loglog, xlabel, ylabel, legend,
                               title, subplot, show, grid)
 import matplotlib.pyplot as plt
 import numpy as np
+import utils as ut
 
 from sklearn import model_selection
 from sklearn.model_selection import train_test_split
@@ -10,7 +11,7 @@ from sklearn.linear_model import LogisticRegression
 from .toolbox import rlr_validate
 from .toolbox import correlated_ttest
 
-def two_layer_cross_validation(X, y, lambdas):
+def two_layer_cross_validation(X, y, attribute_names, lambdas, h_range):
     N, M = X.shape
     y = y.squeeze()
 
@@ -69,7 +70,13 @@ def two_layer_cross_validation(X, y, lambdas):
 
         # insert ANN
 
-        #opt_h[j] =
+        min_error_rate = None
+        min_h = None
+        for h in h_range:
+            error_rate = ut.train_and_visualize_model(X_train, np.expand_dims(y_train, 1), attribute_names, h, 0.0001)
+            if error_rate < min_error_rate:
+                min_error_rate = error_rate
+                min_h = h
 
         #Error_test_ann =
 
