@@ -53,7 +53,7 @@ def project2Stuff(x0, X, y, attribute_names, sex_names):
 
     ut.train_and_visualize_model(X_std, y_std, sex_names + attribute_names, 1, 0.0001)
     ut.linear_regression(X, y, sex_names + attribute_names)
-    # X_reduced = ut.reduce_feature_space(X_std)
+
     # ut.train_and_visualize_model(X_reduced, y_std, sex_names + attribute_names, 2, 0.0001)
 
     lambdas = np.power(10., np.arange(-1, 1, 0.1))
