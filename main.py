@@ -48,12 +48,17 @@ def project2Stuff(x0, X, y, attribute_names, sex_names):
     y_std = y - y.mean(axis=0)
     y_std = y_std / y_std.std(axis=0)
 
-    X_reduced = ut.reduce_feature_space(X_std)
-    ut.train_and_visualize_model(X_reduced, y_std, sex_names + attribute_names, 2, 0.0001)
+    ut.linear_regression(X, y, sex_names + attribute_names)
+    # X_reduced = ut.reduce_feature_space(X_std)
+    # ut.train_and_visualize_model(X_reduced, y_std, sex_names + attribute_names, 2, 0.0001)
 
-    #ut.regularized_linear_regression(X_std, y_std, sex_names + attribute_names, np.power(10., np.arange(-1, 1, 0.1)))
-    #ut.two_layer_cross_validation(X_std, y_std, np.power(10., np.arange(-1, 1, 0.1)))
+    lambdas = np.power(10., np.arange(-1, 1, 0.1))
+    h_range = range(1,4)
+    # ut.regularized_linear_regression(X_std, y_std, sex_names + attribute_names, lambdas, h_range)
+    # ut.two_layer_cross_validation(X_std, y_std, np.power(10., np.arange(-1, 1, 0.1)))
     print("Project 2!")
+
+
 def main(file_name):
     # Load data
     # x0 is the first row of the data containing the discrete category variable Sex

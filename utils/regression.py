@@ -2,19 +2,23 @@
 
 from matplotlib.pylab import (figure, semilogx, loglog, xlabel, ylabel, legend,
                               title, subplot, show, grid)
+import sklearn.linear_model as lm
 import matplotlib.pyplot as plt
 import numpy as np
 
-from sklearn import model_selection
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
 
 from .toolbox import rlr_validate
 
 
-def baseline(y):
-    y.mean()
+def linear_regression(X,y, attribute_names):
+    Km = 10
+    Xm = np.power(X, range(1, Km + 1))
+    model = lm.LinearRegression()
+    model = model.fit(Xm, y)
 
+    # Predict values
+    y_est = model.predict(Xm)
+    print(y_est)
 
 def regularized_linear_regression(X, y, attribute_names, lambdas):
     N, M = X.shape
@@ -56,4 +60,4 @@ def regularized_linear_regression(X, y, attribute_names, lambdas):
     w_rlr[:] = np.linalg.solve(XtX + lambdaI, Xty).squeeze()
 
     for m in range(M):
-        print('{:>11} {:>11}'.format(attribute_names[m], np.round(w_rlr[m], 2)))
+        print('{:>11} {:>11}'.format(attribute_names[m], np.round(w_rlr[m], 3)))

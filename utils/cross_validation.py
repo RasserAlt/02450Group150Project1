@@ -70,7 +70,9 @@ def two_layer_cross_validation(X, y, lambdas):
         # insert ANN
 
         #opt_h[j] =
+
         #Error_test_ann =
+
         #r_ann_rlr =
 
         j += 1

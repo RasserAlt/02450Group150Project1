@@ -26,7 +26,6 @@ def reduce_feature_space(X):
 
 
 def train_and_visualize_model(X, y, attributeNames, n_hidden_units = 1, weight_decay=0):
-    print(torch.__version__)
     plt.rcParams.update({'font.size': 12})
 
     # Use the given parameters instead of loading data from a file
@@ -97,7 +96,7 @@ def train_and_visualize_model(X, y, attributeNames, n_hidden_units = 1, weight_d
                                                            X=X_train,
                                                            y=y_train,
                                                            n_replicates=3,
-                                                           max_iter=max_iter, weight_decay=weight_decay)
+                                                           max_iter=max_iter)
 
         print('\n\tBest loss: {}\n'.format(final_loss))
 
