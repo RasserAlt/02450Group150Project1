@@ -1,6 +1,8 @@
 import utils as ut
 import numpy as np
 
+from utils.classification import classification
+
 
 def project1Stuff(x0, X, y, variable_names, class_names):
     # Summary Statistics
@@ -47,7 +49,9 @@ def project2Stuff(x0, X, y, attribute_names, sex_names):
     X_std = X_std / X_std.std(axis=0)
     y_std = y - y.mean(axis=0)
     y_std = y_std / y_std.std(axis=0)
+    classification.classification()
 
+    ut.train_and_visualize_model(X_std, y_std, sex_names + attribute_names, 1, 0.0001)
     ut.linear_regression(X, y, sex_names + attribute_names)
     # X_reduced = ut.reduce_feature_space(X_std)
     # ut.train_and_visualize_model(X_reduced, y_std, sex_names + attribute_names, 2, 0.0001)
@@ -57,8 +61,6 @@ def project2Stuff(x0, X, y, attribute_names, sex_names):
     # ut.regularized_linear_regression(X_std, y_std, sex_names + attribute_names, lambdas, h_range)
     # ut.two_layer_cross_validation(X_std, y_std, np.power(10., np.arange(-1, 1, 0.1)))
     print("Project 2!")
-
-
 def main(file_name):
     # Load data
     # x0 is the first row of the data containing the discrete category variable Sex

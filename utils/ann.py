@@ -4,26 +4,6 @@ import numpy as np
 from sklearn import model_selection
 import torch
 import utils as ut
-from sklearn.decomposition import PCA
-
-def reduce_feature_space(X):
-    '''
-    Reduces the dimensionality of the feature space to 2 dimensions using PCA.
-
-    Args:
-        X:      A numpy array of shape (N, M), where N is the number of
-                observations and M is the number of input features.
-
-    Returns:
-        A numpy array of shape (N, 2), where N is the number of observations
-        and 2 is the number of dimensions.
-    '''
-
-    pca = PCA(n_components=2)
-    X_reduced = pca.fit_transform(X)
-
-    return X_reduced
-
 
 def train_and_visualize_model(X, y, attributeNames, n_hidden_units = 1, weight_decay=0):
     plt.rcParams.update({'font.size': 12})
