@@ -121,17 +121,17 @@ def train_and_visualize_model(X, y, attributeNames, n_hidden_units = 1, weight_d
     # Show the plots
     # plt.show(decision_boundaries.number) # try these lines if the following code fails (depends on package versions)
     # plt.show(summaries.number)
-    plt.show()
+    #plt.show()
 
     # Display a diagram of the best network in last fold
     print('Diagram of best neural net in last fold:')
     weights = [net[i].weight.data.numpy().T for i in [0, 2]]
     biases = [net[i].bias.data.numpy() for i in [0, 2]]
     tf = [str(net[i]) for i in [1, 3]]
-    ut.draw_neural_net(weights, biases, tf)
+    #ut.draw_neural_net(weights, biases, tf)
 
     # Print the average classification error rate
     average_error_rate = round(100 * np.mean(errors), 4)
     print(f'\nGeneralization error/average error rate: {average_error_rate}%')
-    return average_error_rate
+    return average_error_rate, net
 

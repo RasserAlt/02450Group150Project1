@@ -1,3 +1,4 @@
+import torch
 from matplotlib.pylab import (figure, semilogx, loglog, xlabel, ylabel, legend,
                               title, subplot, show, grid)
 import matplotlib.pyplot as plt
@@ -24,13 +25,10 @@ def two_layer_cross_validation(X, y, attribute_names, lambdas, h_range):
     # Initialize variables
     # T = len(lambdas)
     opt_h = np.empty((K, 1))
-    Error_train_ann = np.empty((K, 1))
     Error_test_ann = np.empty((K, 1))
     opt_lambda = np.empty((K, 1))
     w_rlr = np.empty((M+1, K))
-    Error_train_rlr = np.empty((K, 1))
     Error_test_rlr = np.empty((K, 1))
-    Error_train_nofeatures = np.empty((K, 1))
     Error_test_nofeatures = np.empty((K, 1))
 
     r_ann_rlr = np.empty((K, 1))
@@ -55,39 +53,47 @@ def two_layer_cross_validation(X, y, attribute_names, lambdas, h_range):
         XtX = Xoff.T @ Xoff
 
         # Compute mean squared error without using the input data at all
-        Error_test_nofeatures[j] = np.square(y_test - y_test.mean()).sum(axis=0) / y_test.shape[0]
+        Error_test_nofeatures[j] = np.square(y_test - y_test.mean()).sum(axis=0)*100 / y_test.shape[0]
 
         # Estimate weights for the optimal value of lambda, on entire training set
         lambdaI = opt_lambda[j] * np.eye(M+1)
         lambdaI[0, 0] = 0  # Do no regularize the bias term
         w_rlr[:, j] = np.linalg.solve(XtX + lambdaI, Xty).squeeze()
         # Compute mean squared error with regularization with optimal lambda
-        Error_test_rlr[j] = np.square(y_test - Xofftest @ w_rlr[:, j]).sum(axis=0) / y_test.shape[0]
+        Error_test_rlr[j] = np.square(y_test - Xofftest @ w_rlr[:, j]).sum(axis=0)*100 / y_test.shape[0]
         r_rlr_nofeatures[j] = np.mean(np.square(y_test - Xofftest @ w_rlr[:, j]) - np.square(y_test - y_test.mean()))
 
         # insert ANN
+        Error_test_ann[j], min_net = ut.train_and_visualize_model(X_train, np.expand_dims(y_train, 1), attribute_names, h_range[0], 0.0001)
+        opt_h[j] = h_range[0]
+        print(y_test[1])
+        print(torch.Tensor(X_test[1]))
+        print(min_net(torch.Tensor(X_test)).detach().numpy())
 
-        min_error_rate = 0
-        min_h = None
-        for h in h_range:
-            error_rate = ut.train_and_visualize_model(X_train, np.expand_dims(y_train, 1), attribute_names, h, 0.0001)
-            if error_rate < min_error_rate or min_error_rate == 0:
-                min_error_rate = error_rate
-                min_h = h
+        for h in h_range[1:]:
+            error_rate, net = ut.train_and_visualize_model(X_train, np.expand_dims(y_train, 1), attribute_names, h, 0.0001)
+            if error_rate < Error_test_ann[j]:
+                Error_test_ann[j] = error_rate
+                opt_h[j] = h
+                min_net = net
 
-        #Error_test_ann =
+        r_ann_rlr[j] = np.mean(np.square(y_test - Xofftest @ w_rlr[:, j]) - np.square(y_test - min_net(torch.Tensor(X_test)).detach().numpy()))
 
-        #r_ann_rlr =
+        r_nofeatures_ann[j] = np.mean(np.square(y_test - y_test.mean()) - np.square(y_test - min_net(torch.Tensor(X_test)).detach().numpy()))
 
         j += 1
 
     print('table:')
     for j in range(K):
-        print('{:} {:} {:}'.format(opt_lambda[j], Error_test_rlr[j], Error_test_nofeatures[j]))
+        print('{:} {:} {:} {:} {:}'.format(opt_h[j], Error_test_ann[j], opt_lambda[j], Error_test_rlr[j], Error_test_nofeatures[j]))
 
     # Initialize parameters and run test appropriate for setup II
     alpha = 0.05
     rho = 1 / K
-    p_setupII, CI_setupII = correlated_ttest(r_rlr_nofeatures, rho, alpha=alpha)
+    p_rlr_nofeatures_setupII, CI_rlr_nofeatures_setupII = correlated_ttest(r_rlr_nofeatures, rho, alpha=alpha)
+    p_ann_rlr_setupII, CI_ann_rlr_setupII = correlated_ttest(r_ann_rlr, rho, alpha=alpha)
+    p_nofeatures_ann_setupII, CI_nofeatures_ann_setupII = correlated_ttest(r_nofeatures_ann, rho, alpha=alpha)
 
-    print(p_setupII, CI_setupII)
+    print(p_rlr_nofeatures_setupII, CI_rlr_nofeatures_setupII)
+    print(p_ann_rlr_setupII, CI_ann_rlr_setupII)
+    print(p_nofeatures_ann_setupII, CI_nofeatures_ann_setupII)
