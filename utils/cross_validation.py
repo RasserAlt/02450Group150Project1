@@ -66,11 +66,11 @@ def two_layer_cross_validation(X, y, attribute_names, lambdas, h_range):
 
         # insert ANN
 
-        min_error_rate = None
+        min_error_rate = 0
         min_h = None
         for h in h_range:
             error_rate = ut.train_and_visualize_model(X_train, np.expand_dims(y_train, 1), attribute_names, h, 0.0001)
-            if error_rate < min_error_rate:
+            if error_rate < min_error_rate or min_error_rate == 0:
                 min_error_rate = error_rate
                 min_h = h
 
