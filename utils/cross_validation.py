@@ -15,10 +15,6 @@ def two_layer_cross_validation(X, y, attribute_names, lambdas, h_range):
     N, M = X.shape
     y = y.squeeze()
 
-    # Add offset attribute
-    X = np.concatenate((np.ones((X.shape[0], 1)), X), 1)
-    M = M + 1
-
     ## Crossvalidation
     # Create crossvalidation partition for evaluation
     K = 10

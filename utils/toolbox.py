@@ -25,6 +25,7 @@ def rlr_validate(X, y, lambdas, cvf=10):
         test_err_vs_lambda  test error as function of lambda (vector)
     '''
     CV = model_selection.KFold(cvf, shuffle=True)
+    X = np.concatenate((np.ones((X.shape[0], 1)), X), 1)
     M = X.shape[1]
     w = np.empty((M, cvf, len(lambdas)))
     train_error = np.empty((cvf, len(lambdas)))
