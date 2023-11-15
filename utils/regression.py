@@ -23,9 +23,7 @@ def linear_regression(X,y, attribute_names):
 def regularized_linear_regression(X, y, attribute_names, lambdas):
     N, M = X.shape
     y = y.squeeze()
-    X = np.concatenate((np.ones((X.shape[0], 1)), X), 1)
     attribute_names = [u'Offset'] + attribute_names
-    M = M + 1
     K = 10
 
     opt_val_err, opt_lambda, mean_w_vs_lambda, train_err_vs_lambda, test_err_vs_lambda = rlr_validate(X,
@@ -51,13 +49,14 @@ def regularized_linear_regression(X, y, attribute_names, lambdas):
     grid()
     show()
 
-    Xty = X.T @ y
-    XtX = X.T @ X
-    w_rlr = np.empty(M)
+    Xoff = np.concatenate((np.ones((X.shape[0], 1)), X), 1)
+    Xty = Xoff.T @ y
+    XtX = Xoff.T @ Xoff
+    w_rlr = np.empty(M+1)
 
-    lambdaI = opt_lambda * np.eye(M)
+    lambdaI = opt_lambda * np.eye(M+1)
     lambdaI[0, 0] = 0  # Do no regularize the bias term
     w_rlr[:] = np.linalg.solve(XtX + lambdaI, Xty).squeeze()
 
-    for m in range(M):
+    for m in range(M+1):
         print('{:>11} {:>11}'.format(attribute_names[m], np.round(w_rlr[m], 3)))

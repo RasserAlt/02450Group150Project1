@@ -27,7 +27,7 @@ def two_layer_cross_validation(X, y, attribute_names, lambdas, h_range):
     Error_train_ann = np.empty((K, 1))
     Error_test_ann = np.empty((K, 1))
     opt_lambda = np.empty((K, 1))
-    w_rlr = np.empty((M, K))
+    w_rlr = np.empty((M+1, K))
     Error_train_rlr = np.empty((K, 1))
     Error_test_rlr = np.empty((K, 1))
     Error_train_nofeatures = np.empty((K, 1))
@@ -49,20 +49,21 @@ def two_layer_cross_validation(X, y, attribute_names, lambdas, h_range):
                                                                                                           y_train,
                                                                                                           lambdas,
                                                                                                           k)
-
-        Xty = X_train.T @ y_train
-        XtX = X_train.T @ X_train
+        Xoff  = np.concatenate((np.ones((X_train.shape[0], 1)), X_train), 1)
+        Xofftest = np.concatenate((np.ones((X_test.shape[0], 1)), X_test), 1)
+        Xty = Xoff.T @ y_train
+        XtX = Xoff.T @ Xoff
 
         # Compute mean squared error without using the input data at all
         Error_test_nofeatures[j] = np.square(y_test - y_test.mean()).sum(axis=0) / y_test.shape[0]
 
         # Estimate weights for the optimal value of lambda, on entire training set
-        lambdaI = opt_lambda[j] * np.eye(M)
+        lambdaI = opt_lambda[j] * np.eye(M+1)
         lambdaI[0, 0] = 0  # Do no regularize the bias term
         w_rlr[:, j] = np.linalg.solve(XtX + lambdaI, Xty).squeeze()
         # Compute mean squared error with regularization with optimal lambda
-        Error_test_rlr[j] = np.square(y_test - X_test @ w_rlr[:, j]).sum(axis=0) / y_test.shape[0]
-        r_rlr_nofeatures[j] = np.mean(np.square(y_test - X_test @ w_rlr[:, j]) - np.square(y_test - y_test.mean()))
+        Error_test_rlr[j] = np.square(y_test - Xofftest @ w_rlr[:, j]).sum(axis=0) / y_test.shape[0]
+        r_rlr_nofeatures[j] = np.mean(np.square(y_test - Xofftest @ w_rlr[:, j]) - np.square(y_test - y_test.mean()))
 
         # insert ANN
 
